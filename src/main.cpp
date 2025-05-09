@@ -1,30 +1,32 @@
 #include <Arduino.h>
+ 
+#define BAUDRATE 9600
+#define N_Times 10
+#define delayTimeOn 100
+#define delayTimeOff 1000
+#define delayTime 5000
 
-#define N_PINS 5                                       // Number of Pins
-#define BAUDRATE 9600                                  // Serial Communication Baudrate
-
-#define T_ON    100                                    // Time LED is ON 
-#define T_OFF   400                                    // Time LED is OFF
-#define T_WAIT  3000                                   // Time to Wait
-
-// Global Variables
-uint8_t pinLed[] = {13, 12, 8, 7, 4};                  // Pins for LEDs
-
+// Pinnummern der LEDs
+uint8_t pinLed[] = {13, 12, 8, 7, 4};
+uint8_t nPins = sizeof(pinLed)/sizeof(pinLed[0]);
+ 
 void setup() {
-  Serial.begin(BAUDRATE);                              // Start Serial Communication
-
-  // Set Pins as Output
-  for (uint8_t i = 0; i < N_PINS; i++) {                // Loop for all LEDs
-     pinMode( pinLed[i], OUTPUT);                       // Set Pin as Output
+  Serial.begin(BAUDRATE);
+ 
+// Pins als Output definiert
+  for (uint8_t i = 0; i < nPins; i++) {
+     pinMode(pinLed[i], OUTPUT);
   }
 }
-
+ 
 void loop() {
-  for (uint8_t i = 0; i < N_PINS; i++) {                // Loop for all LEDs
-    digitalWrite(pinLed[i], HIGH);                      // Turn ON LED
-    delay(T_ON);                                        // Time LED is ON
-    digitalWrite(pinLed[i], LOW);                       // Turn OFF LED
-    delay(T_OFF);                                       // Time LED is OFF
+// Zufällige LED an- und ausschalten
+  for (uint8_t i = 0; i < N_Times; i++) {
+    uint8_t randomPin = random(nPins); //nPins hier korrekt da Index bei 0 beginnt
+    digitalWrite(pinLed[randomPin], HIGH);
+    delay(delayTimeOn);
+    digitalWrite(pinLed[randomPin], LOW);
+    delay(delayTimeOff);
   }
-  delay(T_WAIT);                                        // Time to Wait
+  delay(delayTime);
 }
